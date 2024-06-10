@@ -12,9 +12,9 @@ public class ProductAppService : IProductAppService
     private readonly IMapper _productMapper;
     private readonly IValidator<ProductDto> _productDtoValidator;
 
-    public ProductAppService(ICrudRepository<Product> clientRepository, IMapper productMapper, IValidator<ProductDto> productDtoValidator)
+    public ProductAppService(ICrudRepository<Product> productRepository, IMapper productMapper, IValidator<ProductDto> productDtoValidator)
     {
-        _productRepository = clientRepository;
+        _productRepository = productRepository;
         _productMapper = productMapper;
         _productDtoValidator = productDtoValidator;
     }
@@ -27,13 +27,15 @@ public class ProductAppService : IProductAppService
 
     public async Task<ProductDto> GetById(params object[] keyValues)
     {
-        var client = await _productRepository.GetById(keyValues);
-        return _productMapper.Map<ProductDto>(client);
+        var product = await _productRepository.GetById(keyValues);
+        return _productMapper.Map<ProductDto>(product);
     }
 
     public async Task Create(ProductDto productDto)
     {
-        if (null != await _productRepository.GetById(productDto.Id))
+        var productFromDb = await _productRepository.GetById(productDto.Id);
+
+        if (productFromDb is not null)
         {
             throw new Exception("Ya existe un producto con este Id");
         }
@@ -43,31 +45,36 @@ public class ProductAppService : IProductAppService
         var newProduct = _productMapper.Map<Product>(productDto);
         await _productRepository.Create(newProduct);
     }
+
     public async Task Update(ProductDto productDto)
     {
-        if (null == await _productRepository.GetById(productDto.Id))
+        var productFromDb = await _productRepository.GetById(productDto.Id);
+
+        if (productFromDb is null)
         {
-            throw new Exception("No existe ningún cliente con este Id");
+            throw new Exception("No existe ningún producto con este Id");
         }
 
         ValidateDto(productDto);
 
-        var entity = _productMapper.Map<Product>(productDto);
-        await _productRepository.Update(entity);
+        var productEntity = _productMapper.Map<Product>(productDto);
+        await _productRepository.Update(productEntity);
     }
 
     public async Task DeleteById(int productId)
     {
-        var clientToDelete = await _productRepository.GetById(productId) ?? throw new Exception("No existe ningún cliente con este Id");
+        var productToDelete = await _productRepository.GetById(productId) ?? throw new Exception("No existe ningún producto con este Id");
 
-        await _productRepository.Delete(clientToDelete);
+        await _productRepository.Delete(productToDelete);
     }
 
     public async Task Delete(ProductDto productDto)
     {
-        if (null == _productRepository.GetById(productDto.Id))
+        var productFromDb = await _productRepository.GetById(productDto.Id);
+
+        if (productFromDb is null)
         {
-            throw new Exception("No existe ningún cliente con este Id");
+            throw new Exception("No existe ningún producto con este Id");
         }
 
         ValidateDto(productDto);

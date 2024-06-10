@@ -62,8 +62,8 @@ public class ClientAppService : IClientAppService
 
         ValidateDto(clientDto);
 
-        var entity = _clientMapper.Map<Client>(clientDto);
-        await _clientRepository.Update(entity);
+        var clientEntity = _clientMapper.Map<Client>(clientDto);
+        await _clientRepository.Update(clientEntity);
     }
 
     public async Task DeleteById(int clientId)

@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carglass.TechnicalAssessment.Backend.BL", "Carglass.TechnicalAssessment.Backend.BL\Carglass.TechnicalAssessment.Backend.BL.csproj", "{D1477001-F901-44D2-A443-B4A1B9151489}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carglass.TechnicalAssessment.Backend.BL", "Carglass.TechnicalAssessment.Backend.BL\Carglass.TechnicalAssessment.Backend.BL.csproj", "{D1477001-F901-44D2-A443-B4A1B9151489}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carglass.TechnicalAssessment.Backend.DL", "Carglass.TechnicalAssessment.Backend.DL\Carglass.TechnicalAssessment.Backend.DL.csproj", "{FE18790F-6FBE-46E4-901B-ED1E965B66C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carglass.TechnicalAssessment.Backend.DL", "Carglass.TechnicalAssessment.Backend.DL\Carglass.TechnicalAssessment.Backend.DL.csproj", "{FE18790F-6FBE-46E4-901B-ED1E965B66C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carglass.TechnicalAssessment.Backend.Api", "Carglass.TechnicalAssessment.Backend.Api\Carglass.TechnicalAssessment.Backend.Api.csproj", "{F22D49EB-3E97-4140-88B2-32AA7FAB8012}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carglass.TechnicalAssessment.Backend.Api", "Carglass.TechnicalAssessment.Backend.Api\Carglass.TechnicalAssessment.Backend.Api.csproj", "{F22D49EB-3E97-4140-88B2-32AA7FAB8012}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carglass.TechnicalAssessment.Backend.Dtos", "Carglass.TechnicalAssessment.Backend.Dtos\Carglass.TechnicalAssessment.Backend.Dtos.csproj", "{23371933-171C-486D-A570-F46C7F619FAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carglass.TechnicalAssessment.Backend.Dtos", "Carglass.TechnicalAssessment.Backend.Dtos\Carglass.TechnicalAssessment.Backend.Dtos.csproj", "{23371933-171C-486D-A570-F46C7F619FAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carglass.TechnicalAssessment.Backend.Entities", "Carglass.TechnicalAssessment.Backend.Entities\Carglass.TechnicalAssessment.Backend.Entities.csproj", "{6744C5CB-3732-4241-9014-3AE131AE544D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carglass.TechnicalAssessment.Backend.Entities", "Carglass.TechnicalAssessment.Backend.Entities\Carglass.TechnicalAssessment.Backend.Entities.csproj", "{6744C5CB-3732-4241-9014-3AE131AE544D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carglass.TechnicalAssessment.Backend.Implementation.UnitTests", "Carglass.TechnicalAssessment.Backend.Implementation.UnitTests\Carglass.TechnicalAssessment.Backend.Implementation.UnitTests.csproj", "{7F64AD34-9A0B-4BC9-A8D8-B6E35920A9FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{6744C5CB-3732-4241-9014-3AE131AE544D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6744C5CB-3732-4241-9014-3AE131AE544D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6744C5CB-3732-4241-9014-3AE131AE544D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F64AD34-9A0B-4BC9-A8D8-B6E35920A9FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F64AD34-9A0B-4BC9-A8D8-B6E35920A9FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F64AD34-9A0B-4BC9-A8D8-B6E35920A9FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F64AD34-9A0B-4BC9-A8D8-B6E35920A9FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
