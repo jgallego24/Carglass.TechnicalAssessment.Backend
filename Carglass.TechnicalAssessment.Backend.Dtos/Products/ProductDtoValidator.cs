@@ -13,6 +13,6 @@ public class ProductDtoValidator : AbstractValidator<ProductDto>
 
         RuleFor(x => x.ProductName)
             .NotEmpty()
-            .WithMessage("El tipo de producto es necesario.");
+            .WithMessage("El nombre del producto es necesario.");
     }
 }

@@ -33,7 +33,9 @@ public class ClientAppService : IClientAppService
 
     public async Task Create(ClientDto clientDto)
     {
-        if (null != await _clientRepository.GetById(clientDto.Id))
+        var clientFromDb = await _clientRepository.GetById(clientDto.Id);
+
+        if (clientFromDb is not null)
         {
             throw new Exception("Ya existe un cliente con este Id");
         }
@@ -49,47 +51,51 @@ public class ClientAppService : IClientAppService
         await _clientRepository.Create(newClient);
     }
 
-        public async Task Update(ClientDto clientDto)
+    public async Task Update(ClientDto clientDto)
+    {
+        var clientFromDb = await _clientRepository.GetById(clientDto.Id);
+
+        if (clientFromDb is null)
         {
-            if (null == await _clientRepository.GetById(clientDto.Id))
-            {
-                throw new Exception("No existe ningún cliente con este Id");
-            }
-
-            ValidateDto(clientDto);
-
-            var entity = _clientMapper.Map<Client>(clientDto);
-            await _clientRepository.Update(entity);
+            throw new Exception("No existe ningún cliente con este Id");
         }
 
-        public async Task DeleteById(int clientId)
-        {
-            var clientToDelete = await _clientRepository.GetById(clientId) ?? throw new Exception("No existe ningún cliente con este Id");
+        ValidateDto(clientDto);
 
-            await _clientRepository.Delete(clientToDelete);
+        var entity = _clientMapper.Map<Client>(clientDto);
+        await _clientRepository.Update(entity);
+    }
+
+    public async Task DeleteById(int clientId)
+    {
+        var clientToDelete = await _clientRepository.GetById(clientId) ?? throw new Exception("No existe ningún cliente con este Id");
+
+        await _clientRepository.Delete(clientToDelete);
+    }
+
+    public async Task Delete(ClientDto clientDto)
+    {
+        var clientFromDb = await _clientRepository.GetById(clientDto.Id);
+
+        if (clientFromDb is null)
+        {
+            throw new Exception("No existe ningún cliente con este Id");
         }
 
-        public async Task Delete(ClientDto clientDto)
+        ValidateDto(clientDto);
+
+        var clientToDelete = _clientMapper.Map<Client>(clientDto);
+
+        await _clientRepository.Delete(clientToDelete);
+    }
+
+    private void ValidateDto(ClientDto clientDto)
+    {
+        var validationResult = _clientDtoValidator.Validate(clientDto);
+        if (validationResult.Errors.Any())
         {
-            if (null == _clientRepository.GetById(clientDto.Id))
-            {
-                throw new Exception("No existe ningún cliente con este Id");
-            }
-
-            ValidateDto(clientDto);
-
-            var clientToDelete = _clientMapper.Map<Client>(clientDto);
-
-            await _clientRepository.Delete(clientToDelete);
+            string toShowErrors = string.Join("; ", validationResult.Errors.Select(s => s.ErrorMessage));
+            throw new Exception($"El cliente especificado no cumple los requisitos de validación. Errores: '{toShowErrors}'");
         }
-
-        private void ValidateDto(ClientDto clientDto)
-        {
-            var validationResult = _clientDtoValidator.Validate(clientDto);
-            if (validationResult.Errors.Any())
-            {
-                string toShowErrors = string.Join("; ", validationResult.Errors.Select(s => s.ErrorMessage));
-                throw new Exception($"El cliente especificado no cumple los requisitos de validación. Errores: '{toShowErrors}'");
-            }
-        }
+    }
 }
