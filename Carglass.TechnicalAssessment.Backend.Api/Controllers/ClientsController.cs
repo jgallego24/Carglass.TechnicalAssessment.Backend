@@ -12,41 +12,52 @@ public class ClientsController : ControllerBase
 
     public ClientsController(IClientAppService clientAppService)
     {
-        this._clientAppService = clientAppService;
+        _clientAppService = clientAppService;
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        // TODO Implement
-        throw new NotImplementedException();
+        return Ok(await _clientAppService.GetAll());
     }
 
     [HttpGet]
     [Route("{id}")]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        return Ok(_clientAppService.GetById(id));
+        return Ok(await _clientAppService.GetById(id));
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] ClientDto dto)
+    public async Task<IActionResult> Create([FromBody] ClientDto clientDto)
     {
-        // TODO Implement
-        throw new NotImplementedException();
+        await _clientAppService.Create(clientDto);
+
+        return Ok();
     }
 
     [HttpPut]
-    public IActionResult Update([FromBody] ClientDto dto)
+    public async Task<IActionResult> Update([FromBody] ClientDto clientDto)
     {
-        _clientAppService.Update(dto);
+        await _clientAppService.Update(clientDto);
+
         return Ok();
     }
 
     [HttpDelete]
-    public IActionResult Delete([FromBody] ClientDto dto)
+    public async Task<IActionResult> Delete([FromBody] ClientDto clientDto)
     {
-        // TODO Implement
-        throw new NotImplementedException();
+        await _clientAppService.Delete(clientDto);
+
+        return Ok();
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<IActionResult> DeleteById(int id)
+    {
+        await _clientAppService.DeleteById(id);
+
+        return Ok();
     }
 }

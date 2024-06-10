@@ -6,65 +6,90 @@ using FluentValidation;
 
 namespace Carglass.TechnicalAssessment.Backend.BL;
 
-internal class ClientAppService : IClientAppService
+public class ClientAppService : IClientAppService
 {
-    private readonly ClientIMRepository theData;
-    private readonly IMapper magicalClassChanger;
-    private readonly IValidator<ClientDto> allIsCorrectHere;
+    private readonly IClientRepository _clientRepository;
+    private readonly IMapper _clientMapper;
+    private readonly IValidator<ClientDto> _clientDtoValidator;
 
-    // TODO Implement
-    public ClientAppService()
-    { }
-
-    public IEnumerable<ClientDto> GetAll()
+    public ClientAppService(IClientRepository clientRepository, IMapper clientMapper, IValidator<ClientDto> clientDtoValidator)
     {
-        var moneySpenders = theData.GetAll();
-        return magicalClassChanger.Map<IEnumerable<ClientDto>>(moneySpenders);
+        _clientRepository = clientRepository;
+        _clientMapper = clientMapper;
+        _clientDtoValidator = clientDtoValidator;
     }
 
-    public ClientDto GetById(params object[] keyValues)
+    public async Task<IEnumerable<ClientDto>> GetAll()
     {
-        var theOne = theData.GetById(keyValues);
-        return magicalClassChanger.Map<ClientDto>(theOne);
+        var clients = await _clientRepository.GetAll();
+        return _clientMapper.Map<IEnumerable<ClientDto>>(clients);
     }
 
-    public void Create(ClientDto newMoney)
+    public async Task<ClientDto> GetById(params object[] keyValues)
     {
-        if (null != theData.GetById(newMoney.Id))
+        var client = await _clientRepository.GetById(keyValues);
+        return _clientMapper.Map<ClientDto>(client);
+    }
+
+    public async Task Create(ClientDto clientDto)
+    {
+        if (null != await _clientRepository.GetById(clientDto.Id))
         {
             throw new Exception("Ya existe un cliente con este Id");
         }
 
-        // TODO Implement
-        throw new NotImplementedException();
-    }
-
-    public void Update(ClientDto aBitOfMakeup)
-    {
-        if (null == theData.GetById(aBitOfMakeup.Id))
+        if (await _clientRepository.DocNumExists(clientDto.DocNum))
         {
-            throw new Exception("No existe ningún cliente con este Id");
+            throw new Exception("El número de documento tiene que ser único");
         }
 
-        ValidateDto(aBitOfMakeup);
+        ValidateDto(clientDto);
 
-        var entity = magicalClassChanger.Map<Client>(aBitOfMakeup);
-        theData.Update(entity);
+        var newClient = _clientMapper.Map<Client>(clientDto);
+        await _clientRepository.Create(newClient);
     }
 
-    public void Delete(ClientDto byebyee)
-    {
-        // TODO Implement
-        throw new NotImplementedException();
-    }
-
-    private void ValidateDto(ClientDto item)
-    {
-        var validationResult = allIsCorrectHere.Validate(item);
-        if (validationResult.Errors.Any())
+        public async Task Update(ClientDto clientDto)
         {
-            string toShowErrors = string.Join("; ", validationResult.Errors.Select(s => s.ErrorMessage));
-            throw new Exception($"El cliente especificado no cumple los requisitos de validación. Errores: '{toShowErrors}'");
+            if (null == await _clientRepository.GetById(clientDto.Id))
+            {
+                throw new Exception("No existe ningún cliente con este Id");
+            }
+
+            ValidateDto(clientDto);
+
+            var entity = _clientMapper.Map<Client>(clientDto);
+            await _clientRepository.Update(entity);
         }
-    }
+
+        public async Task DeleteById(int clientId)
+        {
+            var clientToDelete = await _clientRepository.GetById(clientId) ?? throw new Exception("No existe ningún cliente con este Id");
+
+            await _clientRepository.Delete(clientToDelete);
+        }
+
+        public async Task Delete(ClientDto clientDto)
+        {
+            if (null == _clientRepository.GetById(clientDto.Id))
+            {
+                throw new Exception("No existe ningún cliente con este Id");
+            }
+
+            ValidateDto(clientDto);
+
+            var clientToDelete = _clientMapper.Map<Client>(clientDto);
+
+            await _clientRepository.Delete(clientToDelete);
+        }
+
+        private void ValidateDto(ClientDto clientDto)
+        {
+            var validationResult = _clientDtoValidator.Validate(clientDto);
+            if (validationResult.Errors.Any())
+            {
+                string toShowErrors = string.Join("; ", validationResult.Errors.Select(s => s.ErrorMessage));
+                throw new Exception($"El cliente especificado no cumple los requisitos de validación. Errores: '{toShowErrors}'");
+            }
+        }
 }

@@ -1,11 +1,19 @@
-﻿namespace Carglass.TechnicalAssessment.Backend.DL.Repositories;
+﻿using Carglass.TechnicalAssessment.Backend.Entities;
+
+namespace Carglass.TechnicalAssessment.Backend.DL.Repositories;
 
 public interface ICrudRepository<TEntity>
 {
-    IEnumerable<TEntity> GetAll();
-    TEntity? GetById(params object[] keyValues);
+    Task<IEnumerable<TEntity>> GetAll();
+    Task<TEntity?> GetById(params object[] keyValues);
 
-    void Create(TEntity item);
-    void Update(TEntity item);
-    void Delete(TEntity item);
+    Task Create(TEntity item);
+    Task Update(TEntity item);
+    Task Delete(TEntity item);
+}
+
+
+public interface IClientRepository : ICrudRepository<Client>
+{
+    Task<bool> DocNumExists(string docNum);
 }

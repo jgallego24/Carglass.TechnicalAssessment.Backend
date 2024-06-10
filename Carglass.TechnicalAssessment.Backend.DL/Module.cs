@@ -1,4 +1,7 @@
 ﻿using Autofac;
+using Carglass.TechnicalAssessment.Backend.DL.Database;
+using Carglass.TechnicalAssessment.Backend.DL.Repositories;
+using Carglass.TechnicalAssessment.Backend.Entities;
 
 namespace Carglass.TechnicalAssessment.Backend.DL;
 
@@ -11,6 +14,8 @@ public class Module : Autofac.Module
 
     private static void RegisterRepositories(ContainerBuilder builder)
     {
-        // TODO Implement repositories DI
+        builder.RegisterType<ApplicationContext>().AsSelf().InstancePerDependency();
+        builder.RegisterType<ClientIMRepository>().As<IClientRepository>().InstancePerDependency();
+        builder.RegisterType<ProductIMRepository>().As<ICrudRepository<Product>>().InstancePerDependency();
     }
 }

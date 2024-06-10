@@ -1,5 +1,6 @@
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
+using Carglass.TechnicalAssessment.Backend.DL.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,11 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
     .AddAutoMapper(typeof(Carglass.TechnicalAssessment.Backend.BL.Module).Assembly);
+
+builder.Host.ConfigureServices((hostContext, services) =>
+{
+    services.AddDbContext<ApplicationContext>();
+});
 
 // Use and configure Autofac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
